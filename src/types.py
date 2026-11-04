@@ -50,3 +50,44 @@ class Model(BaseModel):
     id: str
     object: str = "model"
     owned_by: str = "trae"
+
+
+# Messages API related types
+class MessageRequest(BaseModel):
+    model: str
+    messages: list[ChatMessage]
+    max_tokens: int | None = None
+    temperature: float | None = 1.0
+    top_p: float | None = 1.0
+    stream: bool | None = False
+    stop: str | list[str] | None = None
+    metadata: dict[str, Any] | None = None
+
+
+class MessageResponse(BaseModel):
+    id: str
+    object: str = "message"
+    created: int
+    model: str
+    content: list[dict[str, Any]]
+    role: str = "assistant"
+    stop_reason: str | None = None
+    stop_sequence: str | None = None
+    usage: dict[str, Any]
+
+
+class MessageStreamChunk(BaseModel):
+    type: str
+    message: dict[str, Any] | None = None
+    content_block: dict[str, Any] | None = None
+    delta: dict[str, Any] | None = None
+    usage: dict[str, Any] | None = None
+
+
+class CountTokensRequest(BaseModel):
+    model: str
+    messages: list[ChatMessage]
+
+
+class CountTokensResponse(BaseModel):
+    input_tokens: int
